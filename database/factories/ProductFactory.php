@@ -32,6 +32,7 @@ class ProductFactory extends Factory
             'description' => $this->faker->sentence(),
             'price' => $this->faker->randomFloat(2, 10, 100),
             'image' => $this->faker->randomElement($images),
+            'stock' => $this->faker->numberBetween(0, 100),
             'is_active' => $this->faker->boolean(),
         ];
     }
