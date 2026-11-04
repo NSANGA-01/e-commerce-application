@@ -1,10 +1,18 @@
 
-
 import { Head, Link } from "@inertiajs/react";
+import {Link , usePage} from "@inertiajs/react";
+
 
 export default function Confirmation({ order }) {
+
+    const { flash } = usePage().props;
     return (
         <div className="min-h-screen bg-base-200 p-4 md:p-8">
+            {flash.message && (
+                <div className="alert alert-success">
+                    <span>{flash.message}</span>
+                </div>
+            )}
             <Head title="Order Confirmation" />
 
             <div className="max-w-2xl mx-auto">

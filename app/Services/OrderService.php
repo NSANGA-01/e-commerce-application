@@ -8,16 +8,14 @@ use App\Models\Order;
 
 class OrderService
 {
-    /**
-     * Create a new class instance.
-     */
-    public function __construct(
-        protected CreateGuestOrderAction $createGuestOrderAction
-    ) {}
+   
+    public function __construct() {}
 
     public function processGuestCheckout(CheckoutOrderData $data): Order
     {
-        return $this->createGuestOrderAction->execute($data);
+        $data = CheckoutOrderData::make($data->validated());
+
+        return CreateGuestOrderAction::process($data);
     }
 }
 

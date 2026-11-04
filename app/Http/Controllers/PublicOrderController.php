@@ -26,7 +26,7 @@ class PublicOrderController extends Controller
         $products = Product::where('is_active', true)
         ->latest()
         ->select('id', 'name', 'description', 'price', 'image', 'stock')
-        ->get();
+        ->paginate(9);
 
         return Inertia::render('Catalog/Index', [
             'products' => $products,
@@ -39,7 +39,7 @@ class PublicOrderController extends Controller
     public function checkout(CheckoutRequest $request): RedirectResponse
     {
 
-        $data = new CheckoutOrderData($request->validated());
+        $data =  CheckoutOrderData::make($request->validated());
         $order = $this->orderService->processGuestCheckout($data);
 
         return redirect()->route('order.confirmation', ['orderNumber' => $order->order_number])

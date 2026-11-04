@@ -9,28 +9,27 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-class CreateGuestOrderAction
+
+class CreateGuestOrderAction 
 {
    
-
-  public function execute(CheckoutOrderData $data): Order
+     public function handle(CheckoutOrderData $customData): Order
     {
-        return DB::transaction(function () use ($data) {
+        return DB::transaction(function () {
             $order = new Order([
                 'order_number' => (string) Str::uuid(),
-                'customer_name' => $data->customerName,
-                'customer_email' => $data->customerEmail,
-                'customer_phone' => $data->customerPhone,
-                'shipping_address' => $data->shipping_address,
-                'total_amount' => 0, 
+                'customer_name' => $this->customData->customer_name,
+                'customer_email' => $this->customData->customer_email,
+                'customer_phone' => $this->customData->customer_phone,
+                'shipping_address' => $this->customData->shipping_address,
+                'total_amount' => 0,
                 'status' => 'pending',
             ]);
 
             $order->save();
-
             $totalAmount = 0;
 
-            foreach ($data->items as $itemData) {
+            foreach ($this->customData->items as $itemData) {
                 $product = Product::find($itemData['product_id']);
 
                 if (!$product) {
@@ -67,5 +66,5 @@ class CreateGuestOrderAction
             return $order;
         });
     }
-    
+
 }
