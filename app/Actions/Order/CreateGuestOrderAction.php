@@ -12,23 +12,18 @@ use Kakaprodo\CustomData\Helpers\CustomActionBuilder;
 
 
 
-
 class CreateGuestOrderAction extends CustomActionBuilder
 {
-   function __subDataClass(): string
+  
+     public function handle(CheckoutOrderData $customData): Order
     {
-        return CheckoutOrderData::class;
-    }
-
-     public function handle(): Order
-    {
-        return DB::transaction(function () {
+        return DB::transaction(function () use ($customData) {
             $order = new Order([
                 'order_number' => (string) Str::uuid(),
-                'customer_name' => $this->customData->customer_name,
-                'customer_email' => $this->customData->customer_email,
-                'customer_phone' => $this->customData->customer_phone,
-                'shipping_address' => $this->customData->shipping_address,
+                'customer_name' => $customData->customer_name,
+                'customer_email' => $customData->customer_email,
+                'customer_phone' => $customData->customer_phone,
+                'shipping_address' => $customData->shipping_address,
                 'total_amount' => 0,
                 'status' => 'pending',
             ]);
@@ -36,7 +31,7 @@ class CreateGuestOrderAction extends CustomActionBuilder
             $order->save();
             $totalAmount = 0;
 
-            foreach ($this->customData->items as $itemData) {
+            foreach ($customData->items as $itemData) {
                 $product = Product::find($itemData['product_id']);
 
                 if (!$product) {

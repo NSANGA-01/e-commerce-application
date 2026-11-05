@@ -47,8 +47,8 @@ class PublicOrderController extends Controller
 
     public function confirmation(string $orderNumber): Response
     {
+        
         $order = Order::where('order_number', $orderNumber)->firstOrFail();
-
         return Inertia::render('Catalog/Confirmation', [
             'order' => $order,
         ]);
