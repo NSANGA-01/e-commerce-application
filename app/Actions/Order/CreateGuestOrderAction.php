@@ -8,12 +8,19 @@ use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Kakaprodo\CustomData\Helpers\CustomActionBuilder;
 
 
-class CreateGuestOrderAction 
+
+
+class CreateGuestOrderAction extends CustomActionBuilder
 {
-   
-     public function handle(CheckoutOrderData $customData): Order
+   function __subDataClass(): string
+    {
+        return CheckoutOrderData::class;
+    }
+
+     public function handle(): Order
     {
         return DB::transaction(function () {
             $order = new Order([
