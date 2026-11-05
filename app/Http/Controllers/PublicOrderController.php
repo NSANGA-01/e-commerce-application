@@ -38,10 +38,7 @@ class PublicOrderController extends Controller
 
     public function checkout(CheckoutRequest $request): RedirectResponse
     {
-
-        $data =  CheckoutOrderData::make($request->validated());
-        $order = $this->orderService->processGuestCheckout($data);
-
+        $order = $this->orderService->processGuestCheckout($request->validated());
         return redirect()->route('order.confirmation', ['orderNumber' => $order->order_number])
             ->with('success', 'Your order was placed successfully!');
     }
@@ -50,8 +47,8 @@ class PublicOrderController extends Controller
 
     public function confirmation(string $orderNumber): Response
     {
+        
         $order = Order::where('order_number', $orderNumber)->firstOrFail();
-
         return Inertia::render('Catalog/Confirmation', [
             'order' => $order,
         ]);

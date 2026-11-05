@@ -1,7 +1,9 @@
 <?php
 namespace App\Data\Order;
 
+use App\Models\Product;
 use Kakaprodo\CustomData\CustomData;
+use Illuminate\Validation\ValidationException;
 
 class CheckoutOrderData extends CustomData
 {

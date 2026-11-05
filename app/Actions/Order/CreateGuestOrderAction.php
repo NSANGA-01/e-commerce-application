@@ -8,20 +8,22 @@ use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Kakaprodo\CustomData\Helpers\CustomActionBuilder;
 
 
-class CreateGuestOrderAction 
+
+class CreateGuestOrderAction extends CustomActionBuilder
 {
-   
+  
      public function handle(CheckoutOrderData $customData): Order
     {
-        return DB::transaction(function () {
+        return DB::transaction(function () use ($customData) {
             $order = new Order([
                 'order_number' => (string) Str::uuid(),
-                'customer_name' => $this->customData->customer_name,
-                'customer_email' => $this->customData->customer_email,
-                'customer_phone' => $this->customData->customer_phone,
-                'shipping_address' => $this->customData->shipping_address,
+                'customer_name' => $customData->customer_name,
+                'customer_email' => $customData->customer_email,
+                'customer_phone' => $customData->customer_phone,
+                'shipping_address' => $customData->shipping_address,
                 'total_amount' => 0,
                 'status' => 'pending',
             ]);
@@ -29,7 +31,7 @@ class CreateGuestOrderAction
             $order->save();
             $totalAmount = 0;
 
-            foreach ($this->customData->items as $itemData) {
+            foreach ($customData->items as $itemData) {
                 $product = Product::find($itemData['product_id']);
 
                 if (!$product) {
