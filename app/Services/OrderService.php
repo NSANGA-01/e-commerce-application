@@ -11,11 +11,10 @@ class OrderService
    
     public function __construct() {}
 
-    public function processGuestCheckout(CheckoutOrderData $data): Order
+    public function processGuestCheckout(array $payloadFromRequest): Order
     {
-        $data = CheckoutOrderData::make($data->validated());
-
-        return CreateGuestOrderAction::process($data);
+       
+      return CreateGuestOrderAction::process($payloadFromRequest);
     }
 }
 
