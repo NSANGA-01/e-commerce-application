@@ -19,6 +19,15 @@ class Product extends Model
         'is_active',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'price' => 'decimal:2',
+            'stock' => 'integer',
+            'is_active' => 'boolean',
+        ];
+    }
+
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
