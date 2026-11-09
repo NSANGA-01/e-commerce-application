@@ -1,10 +1,16 @@
 
-
-import { Head, Link } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 
 export default function Confirmation({ order }) {
+
+    const { flash } = usePage().props;
     return (
         <div className="min-h-screen bg-base-200 p-4 md:p-8">
+            {flash.success && (
+                <div className="alert alert-success">
+                    <span>{flash.success}</span>
+                </div>
+            )}
             <Head title="Order Confirmation" />
 
             <div className="max-w-2xl mx-auto">
@@ -38,13 +44,13 @@ export default function Confirmation({ order }) {
                             <div className="flex justify-between gap-4">
                                 <span>Total</span>
                                 <strong>
-                                    {Number(order.total).toLocaleString()} RWF
+                                    {Number(order.total_amount).toLocaleString()} RWF
                                 </strong>
                             </div>
                         </div>
 
                         <Link
-                            href={route("catalog")}
+                            href={route("catalog.index")}
                             className="btn btn-primary mt-5"
                         >
                             Continue Shopping

@@ -26,7 +26,7 @@ class PublicOrderController extends Controller
         $products = Product::where('is_active', true)
         ->latest()
         ->select('id', 'name', 'description', 'price', 'image', 'stock')
-        ->get();
+        ->paginate(9);
 
         return Inertia::render('Catalog/Index', [
             'products' => $products,
@@ -38,10 +38,7 @@ class PublicOrderController extends Controller
 
     public function checkout(CheckoutRequest $request): RedirectResponse
     {
-
-        $data = new CheckoutOrderData($request->validated());
-        $order = $this->orderService->processGuestCheckout($data);
-
+        $order = $this->orderService->processGuestCheckout($request->validated());
         return redirect()->route('order.confirmation', ['orderNumber' => $order->order_number])
             ->with('success', 'Your order was placed successfully!');
     }
@@ -50,8 +47,8 @@ class PublicOrderController extends Controller
 
     public function confirmation(string $orderNumber): Response
     {
+        
         $order = Order::where('order_number', $orderNumber)->firstOrFail();
-
         return Inertia::render('Catalog/Confirmation', [
             'order' => $order,
         ]);
