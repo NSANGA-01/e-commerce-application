@@ -10,6 +10,6 @@ class CreateProductAction extends CustomActionBuilder
 {
     public function handle(ProductData $customData): Product
     {
-        return Product::create($customData->__toArray());
+        return Product::create($customData->onlyValidated());
     }
 }

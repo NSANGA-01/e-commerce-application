@@ -10,9 +10,8 @@ class UpdateProductAction extends CustomActionBuilder
 {
     public function handle(UpdateProductData $customData): Product
     {
-        $product = Product::findOrFail($customData->product_id);
-        $attributes = $customData->__toArray();
-        unset($attributes['product_id']);
+        $product = $customData->product;
+        $attributes = $customData->except(['product']);
         $product->update($attributes);
 
         return $product->refresh();

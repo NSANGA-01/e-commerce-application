@@ -12,9 +12,6 @@ class ProductService
 
     public function create(array $attributes): Product
     {
-        if (isset($attributes['stock'])) {
-        $attributes['stock'] = (int) $attributes['stock'];
-         }
         return CreateProductAction::process($attributes);
     }
 
@@ -23,14 +20,14 @@ class ProductService
     {
         return UpdateProductAction::process([
             ...$attributes,
-            'product_id' => $product->id,
+            'product' => $product,
         ]);
     }
 
     public function delete(Product $product): void
     {
         DeleteProductAction::process([
-            'product_id' => $product->id,
+            'product' => $product,
         ]);
     }
 }

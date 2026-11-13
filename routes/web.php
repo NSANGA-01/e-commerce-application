@@ -11,7 +11,7 @@ Route::get('/', function () {
 
 // Public Catalog & Guest Checkout Routes
 
-Route::get('/Catalog', [PublicOrderController::class, 'catalog'])->name('catalog.index');
+Route::get('/catalog', [PublicOrderController::class, 'catalog'])->name('catalog.index');
 Route::post('/checkout', [PublicOrderController::class, 'checkout'])->name('order.checkout');
 Route::get('/order/confirmation/{orderNumber}', [PublicOrderController::class, 'confirmation'])->name('order.confirmation');
 

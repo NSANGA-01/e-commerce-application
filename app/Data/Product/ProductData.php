@@ -17,9 +17,7 @@ class ProductData extends CustomData
 
             'image?' => $this->property()->string(),
 
-            'stock' => $this->property('integer')
-
-             ->castForValidation(fn ($value) => (int) $value),
+            'stock' => $this->property()->number(),
              
             'is_active' => $this->property()->bool(),
         ];
