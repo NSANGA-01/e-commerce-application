@@ -23,9 +23,9 @@ class CheckoutRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'customerName' => ['required', 'string', 'max:255'],
-            'customerEmail' => ['required', 'email', 'max:255'],
-            'customerPhone' => ['required', 'string', 'max:20'],
+            'customer_name' => ['required', 'string', 'max:255'],
+            'customer_email' => ['required', 'email', 'max:255'],
+            'customer_phone' => ['required', 'string', 'max:20'],
             'shipping_address' => ['required', 'string', 'max:500'],
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'integer', 'exists:products,id'],

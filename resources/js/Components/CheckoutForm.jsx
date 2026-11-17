@@ -13,7 +13,10 @@ export default function CheckoutForm({ cart }) {
     event.preventDefault();
 
     transform((formData) => ({
-      ...formData,
+      customer_name: formData.customerName,
+      customer_email: formData.customerEmail,
+      customer_phone: formData.customerPhone,
+      shipping_address: formData.shipping_address,
       items: cart.map((item) => ({
         product_id: item.id,
         quantity: item.quantity,
@@ -23,7 +26,7 @@ export default function CheckoutForm({ cart }) {
     post(route("order.checkout"));
   };
 
-  function field(name, label, type = "text") {
+  function field(name, label, type = "text", errorName = name) {
     return (
       <label className="form-control w-full">
         <span className="label-text mb-1">{label}</span>
@@ -34,9 +37,9 @@ export default function CheckoutForm({ cart }) {
           onChange={(event) => setData(name, event.target.value)} 
           required 
         />
-        {errors[name] && (
+        {errors[errorName] && (
           <span className="text-error text-sm mt-1">
-            {errors[name]}
+            {errors[errorName]}
           </span>
         )}
       </label>
@@ -48,9 +51,9 @@ export default function CheckoutForm({ cart }) {
       <div className="card-body">
         <h2 className="card-title">Checkout</h2>
         
-        {field("customerName", "Full name")}
-        {field("customerEmail", "Email", "email")}
-        {field("customerPhone", "Phone number", "tel")}
+        {field("customerName", "Full name", "text", "customer_name")}
+        {field("customerEmail", "Email", "email", "customer_email")}
+        {field("customerPhone", "Phone number", "tel", "customer_phone")}
         {field("shipping_address", "Shipping address")}
         
         {errors.items && (
