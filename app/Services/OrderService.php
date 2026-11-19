@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Actions\Order\CreateGuestOrderAction;
-use App\Data\Order\CheckoutOrderData;
+use App\Actions\Order\UpdateOrderStatusAction;
 use App\Models\Order;
 
 class OrderService
@@ -13,8 +13,16 @@ class OrderService
 
     public function processGuestCheckout(array $payloadFromRequest): Order
     {
-       
-      return CreateGuestOrderAction::process($payloadFromRequest);
+        return CreateGuestOrderAction::process($payloadFromRequest);
     }
+
+    public function updateStatus(Order $order, array $attributes): Order
+    {
+        return UpdateOrderStatusAction::process([
+            ...$attributes,
+            'order' => $order,
+        ]);
+    }
+
 }
 
