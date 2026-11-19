@@ -25,7 +25,7 @@ class CreateGuestOrderAction extends CustomActionBuilder
                 'customer_phone' => $customData->customer_phone,
                 'shipping_address' => $customData->shipping_address,
                 'total_amount' => 0,
-                'status' => 'pending',
+                'status' => Order::STATUS_PENDING,
             ]);
 
             $order->save();

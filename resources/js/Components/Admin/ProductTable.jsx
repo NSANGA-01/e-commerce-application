@@ -1,6 +1,6 @@
 import { router } from "@inertiajs/react";
 
-export default function ProductTable({ products }) {
+export default function ProductTable({ products, onEdit }) {
     if (products.length === 0) {
         return <p className="card bg-base-100 p-8 text-center">No products yet.</p>;
     }
@@ -9,10 +9,6 @@ export default function ProductTable({ products }) {
         if (window.confirm(`Delete "${product.name}"?`)) {
             router.delete(route("admin.products.destroy", product.id));
         }
-    }
-
-    function edit(product) {
-        router.get(route("admin.products.edit", product.id));
     }
 
     return (
@@ -29,7 +25,7 @@ export default function ProductTable({ products }) {
                             <td>{product.stock}</td>
                             <td><span className={`badge ${product.is_active ? "badge-success" : "badge-ghost"}`}>{product.is_active ? "Active" : "Hidden"}</span></td>
                             <td className="text-right whitespace-nowrap">
-                                <button className="btn btn-sm btn-ghost" onClick={() => edit(product)}>Edit</button>
+                                <button className="btn btn-sm btn-ghost" onClick={() => onEdit(product)}>Edit</button>
                                 <button className="btn btn-sm btn-error btn-outline" onClick={() => remove(product)}>Delete</button>
                             </td>
                         </tr>

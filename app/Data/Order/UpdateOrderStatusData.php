@@ -11,7 +11,7 @@ class UpdateOrderStatusData extends CustomData
     {
         return [
             'order' => $this->property(Order::class),
-            'status' => $this->property()->string(),
+            'status' => $this->property()->string()->inArray(Order::SUPPORTED_STATUSES),
         ];
     }
 }

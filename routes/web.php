@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicOrderController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminOrderController;
+use App\Http\Controllers\AdminAuthController;
 
 Route::get('/', function () {
     return inertia('Welcome');
@@ -16,9 +17,14 @@ Route::get('/catalog', [PublicOrderController::class, 'catalog'])->name('catalog
 Route::post('/checkout', [PublicOrderController::class, 'checkout'])->name('order.checkout');
 Route::get('/order/confirmation/{orderNumber}', [PublicOrderController::class, 'confirmation'])->name('order.confirmation');
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::get('/admin/login', [AdminAuthController::class, 'create'])->name('admin.login');
+Route::post('/admin/login', [AdminAuthController::class, 'store'])->name('admin.login.store');
+Route::post('/admin/logout', [AdminAuthController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('admin.logout');
+
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/products', [AdminProductController::class, 'index'])->name('products.index');
-    Route::get('/products/{product}/edit', [AdminProductController::class, 'edit'])->name('products.edit');
     Route::post('/products', [AdminProductController::class, 'store'])->name('products.store');
     Route::put('/products/{product}', [AdminProductController::class, 'update'])->name('products.update');
     Route::delete('/products/{product}', [AdminProductController::class, 'destroy'])->name('products.destroy');

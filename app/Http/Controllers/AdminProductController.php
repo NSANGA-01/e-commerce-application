@@ -19,15 +19,6 @@ class AdminProductController extends Controller
     {
         return Inertia::render('Admin/Products/Index', [
             'products' => Product::latest()->paginate(10),
-            'editingProduct' => null,
-        ]);
-    }
-
-    public function edit(Product $product): Response
-    {
-        return Inertia::render('Admin/Products/Index', [
-            'products' => Product::latest()->paginate(10),
-            'editingProduct' => $product,
         ]);
     }
 

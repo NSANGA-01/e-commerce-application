@@ -9,6 +9,13 @@ export default function Index({ orders, selectedOrder, flash }) {
         <div className="min-h-screen bg-base-200">
             <div className="navbar bg-base-100 shadow-sm px-4">
                 <h1 className="text-xl font-bold">Order management</h1>
+                <button
+                    type="button"
+                    className="btn btn-sm btn-ghost ml-auto"
+                    onClick={() => router.post(route("admin.logout"))}
+                >
+                    Logout
+                </button>
             </div>
             <main className="max-w-7xl mx-auto p-4 md:p-8 space-y-6">
                 {flash?.success && <div className="alert alert-success">{flash.success}</div>}
