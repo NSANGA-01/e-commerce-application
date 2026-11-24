@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Mail\OrderPlacedMail;
+use App\Models\Product;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
@@ -102,5 +105,43 @@ class ExampleTest extends TestCase
             ->assertSessionHasErrors('email');
 
         $this->assertGuest();
+    }
+
+    public function test_checkout_sends_customer_and_admin_order_notifications(): void
+    {
+        Mail::fake();
+        config(['mail.admin_address' => 'admin@example.com']);
+
+        $product = Product::create([
+            'name' => 'Test product',
+            'description' => 'Test description',
+            'price' => 25,
+            'stock' => 10,
+            'is_active' => true,
+        ]);
+
+        $this->post(route('order.checkout'), [
+            'customer_name' => 'Test Customer',
+            'customer_email' => 'customer@example.com',
+            'customer_phone' => '555-1234',
+            'shipping_address' => '123 Test Street',
+            'items' => [
+                [
+                    'product_id' => $product->id,
+                    'quantity' => 2,
+                ],
+            ],
+        ])
+            ->assertRedirect();
+
+        Mail::assertSent(OrderPlacedMail::class, 2);
+        Mail::assertSent(OrderPlacedMail::class, function (OrderPlacedMail $mail) {
+            return $mail->hasTo('customer@example.com')
+                && $mail->isAdminNotification === false;
+        });
+        Mail::assertSent(OrderPlacedMail::class, function (OrderPlacedMail $mail) {
+            return $mail->hasTo('admin@example.com')
+                && $mail->isAdminNotification === true;
+        });
     }
 }
